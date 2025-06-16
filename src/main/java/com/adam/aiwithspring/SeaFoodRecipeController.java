@@ -20,12 +20,25 @@ public class SeaFoodRecipeController {
     public String SugguestRecipie(
             @RequestParam(
                     name = "message",
-                    defaultValue = "Suggest a recipe for dinner"
+                    defaultValue = "I would like a simple seafood recipe for dinner"
             )
             String message) {
         final String systemMessage = """
-                Suggest Sea Food recipe. If someone asks about Something else just say i don't know
+                You are a helpful seafood recipe expert. When suggesting recipes:
+                1. If allergies or dietary restrictions are mentioned, adapt the recipe accordingly
+                2. If no allergies or restrictions are mentioned, assume there are none and provide a recipe immediately
+                3. Never ask about allergies or restrictions - only consider them if explicitly mentioned
+                
+                Always provide a complete seafood recipe in this format:
+                - Recipe name
+                - Ingredients list
+                - Cooking instructions
+                
+                Keep the recipe simple and straightforward but delicious.
                 """;
+
+
+
         return this.chatClient.prompt()
                 .system(c -> c.text(systemMessage))
                 .user(message)
